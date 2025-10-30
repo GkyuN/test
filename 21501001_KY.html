@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head><meta charset='UTF-8'><title>시스템 점검 결과</title>
+<style>
+body{font-family:monospace;background:#f4f4f4;padding:20px;}
+h1,h2{color:#0a0a0a;}
+pre{background:#222;color:#dff1ff;padding:10px;border-radius:6px;overflow-x:auto;}
+.good{color:#16a34a;font-weight:bold;}
+.bad{color:#dc2626;font-weight:bold;}
+</style>
+</head><body>
+<h1>시스템 점검 결과 (21501001_KY)</h1>
+<h2>01. Default ID Check</h2><pre>
+<span class='bad'>취약</span> : 아래와 같이 사용하지 않는 기본(Default) 계정이 발견되었습니다. 패스워드 추측 공격 등에 악용될 수 있으므로 삭제하는 것을 권장합니다.
+lp:x:4:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</pre>
+<h2>02. Root UID Check</h2><pre>
+<span class='bad'>취약</span> : root 계정 외에 UID가 '0'인 계정이 발견되었습니다. UID '0'은 관리자 권한을 의미하므로, 비인가 계정에 부여될 경우 시스템 전체가 위험에 노출될 수 있습니다.
+root -> UID0
+user -> UID0
+</pre>
+<h2>03. Passwd File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 2357  9월  4일  11:44 /etc/passwd
+<span class='good'>양호</span> : /etc/passwd 파일의 권한이 644(-rw-r--r--)로 안전하게 설정되어 있습니다.
+</pre>
+<h2>04. Group File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 902  9월 29일  16:27 /etc/group
+<span class='good'>양호</span> : /etc/group 파일의 권한이 644(-rw-r--r--)로 안전하게 설정되어 있습니다.
+</pre>
+<h2>05. Passwd Rule Check</h2><pre>
+PASS_MIN_LEN	10
+PASS_MAX_DAYS	60
+PASS_MIN_DAYS	5
+<span class='good'>양호</span> : 패스워드 최소 길이, 최대/최소 사용 기간이 보안 정책에 맞게 설정되었습니다.
+</pre>
+<h2>06. Shell Check</h2><pre>
+bin:x:1:1:bin:/bin:/usr/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/usr/sbin/nologin
+operator:x:11:0:operator:/root:/usr/sbin/nologin
+games:x:12:100:games:/usr/games:/usr/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/sbin/nologin
+systemd-oom:x:999:999:systemd Userspace OOM Killer:/:/sbin/nologin
+systemd-coredump:x:993:993:systemd Core Dumper:/:/usr/sbin/nologin
+<span class='good'>양호</span> : 로그인이 필요하지 않은 주요 시스템 계정들에 로그인을 차단하는 쉘(/bin/false, /sbin/nologin)이 올바르게 부여되었습니다.
+</pre>
+<h2>07. SU Check</h2><pre>
+ 1. /etc/pam.d/su Check
+#%PAM-1.0
+auth		required	pam_env.so
+auth		sufficient	pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth		sufficient	pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth		required	pam_wheel.so use_uid
+auth		substack	system-auth
+auth		include		postlogin
+account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+account		include		system-auth
+password	include		system-auth
+session		include		system-auth
+session		include		postlogin
+session		optional	pam_xauth.so
+<span class='bad'>취약</span> : su 명령어 사용이 특정 그룹으로 제한되어 있지 않습니다. 모든 사용자가 su 명령어를 통해 root 계정 접근을 시도(패스워드 추측 공격)할 수 있어 보안상 위험합니다.
+
+ 2. /etc/group Check
+bin:x:1:aa
+daemon:x:2:user
+<span class='bad'>취약</span> : daemon, bin 등 로그인이 필요 없는 시스템 그룹에 사용자가 포함되어 있습니다. 이는 시스템 권한 탈취에 악용될 수 있는 잠재적 위험 요소입니다.
+</pre>
+<h2>08. Shadow File PermissionCheck</h2><pre>
+-r--------. 1 root root 1097  8월 28일  11:42 /etc/shadow
+<span class='good'>양호</span> : /etc/shadow 파일의 소유자가 root이고, 권한이 400(-r--------)으로 설정되어 암호화된 패스워드 정보를 안전하게 보호하고 있습니다.
+</pre>
+</body></html>

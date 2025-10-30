@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head><meta charset='UTF-8'><title>시스템 점검 결과</title>
+<style>
+body{font-family:monospace;background:#f4f4f4;padding:20px;}
+h1,h2{color:#0a0a0a;}
+pre{background:#222;color:#dff1ff;padding:10px;border-radius:6px;overflow-x:auto;}
+.good{color:#16a34a;font-weight:bold;}
+.bad{color:#dc2626;font-weight:bold;}
+</style>
+</head><body>
+<h1>시스템 점검 결과 (21501001_KY)</h1>
+<h2>01. Default ID Check</h2><pre>
+<span class='bad'>취약</span>: 아래와 같이 사용하지 않는 Default 계정이 발견되었습니다.
+lp:x:4:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</pre>
+<h2>02. Root Management Check</h2><pre>
+<span class='bad'>취약</span>: root 외에 UID=0 계정이 발견되었습니다.
+root -> UID0
+user -> UID0
+</pre>
+<h2>03. Passwd File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 2357  9월  4일  11:44 /etc/passwd
+<span class='good'>양호</span>: /etc/passwd 권한이 644(-rw-r--r--) 입니다.
+</pre>
+<h2>04. Group File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 902  9월 29일  16:27 /etc/group
+<span class='good'>양호</span>: /etc/group 권한이 644(-rw-r--r--) 입니다.
+</pre>
+<h2>05. Passwd Rule Check</h2><pre>
+PASS_MIN_LEN	10
+PASS_MAX_DAYS	60
+PASS_MIN_DAYS	5
+<span class='good'>양호</span>: 패스워드 정책이 적절합니다.
+</pre>
+<h2>06. Shell Check</h2><pre>
+bin:x:1:1:bin:/bin:/usr/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/usr/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/sbin/nologin
+systemd-oom:x:999:999:systemd Userspace OOM Killer:/:/sbin/nologin
+systemd-coredump:x:993:993:systemd Core Dumper:/:/usr/sbin/nologin
+
+<span class='bad'>취약</span>: 일부 시스템 계정이 로그인 가능 상태입니다.
+</pre>
+<h2>07. SU Check</h2><pre>
+#%PAM-1.0
+auth		required	pam_env.so
+auth		sufficient	pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth		sufficient	pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth		required	pam_wheel.so use_uid
+auth		substack	system-auth
+auth		include		postlogin
+account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+account		include		system-auth
+password	include		system-auth
+session		include		system-auth
+session		include		postlogin
+session		optional	pam_xauth.so
+<span class='bad'>SU Check Result: BAD</span>
+</pre>
+<h2>08. Shadow Check</h2><pre>
+----------. 1 root root 1097  8월 28일  11:42 /etc/shadow
+<span class='good'>양호</span>: /etc/shadow 권한이 안전합니다.
+</pre>
+</body></html>

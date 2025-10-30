@@ -1,0 +1,87 @@
+
+=======07. SU check start ======
+1. /etc/pam.d/su File
+#%PAM-1.0
+auth		required	pam_env.so
+auth		sufficient	pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth		sufficient	pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth		required	pam_wheel.so use_uid
+auth		substack	system-auth
+auth		include		postlogin
+account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+account		include		system-auth
+password	include		system-auth
+session		include		system-auth
+session		include		postlogin
+session		optional	pam_xauth.so
+ 2. /etc/group File
+root:x:0:
+bin:x:1:aa
+daemon:x:2:user
+sys:x:3:
+adm:x:4:
+tty:x:5:
+disk:x:6:
+lp:x:7:
+mem:x:8:
+kmem:x:9:
+wheel:x:10:user
+cdrom:x:11:
+mail:x:12:
+man:x:15:
+dialout:x:18:
+floppy:x:19:
+games:x:20:
+tape:x:33:
+video:x:39:
+ftp:x:50:
+lock:x:54:
+audio:x:63:
+users:x:100:
+clock:x:103:
+nobody:x:65534:
+tss:x:59:clevis
+dbus:x:81:
+utmp:x:22:
+utempter:x:35:
+avahi:x:70:
+systemd-oom:x:999:
+input:x:104:
+kvm:x:36:
+render:x:105:
+sgx:x:106:
+systemd-journal:x:190:
+polkitd:x:114:
+printadmin:x:998:
+colord:x:997:
+stapusr:x:156:
+stapsys:x:157:
+stapdev:x:158:
+stapunpriv:x:159:stapunpriv
+rtkit:x:172:
+geoclue:x:996:
+sssd:x:995:
+libstoragemgmt:x:994:
+systemd-coredump:x:993:
+wsdd:x:992:
+clevis:x:991:
+setroubleshoot:x:990:
+flatpak:x:989:
+brlapi:x:988:
+gdm:x:42:
+gnome-initial-setup:x:987:
+dnsmasq:x:986:
+pesign:x:985:
+sshd:x:74:
+chrony:x:984:
+tcpdump:x:72:
+plocate:x:983:
+gnome-remote-desktop:x:982:
+pipewire:x:981:
+user:x:1000:
+Group su 권한 확인: BAD
+ ---------[Result]--------
+SU check result : BAD
+=========[END]==========

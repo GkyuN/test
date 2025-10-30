@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head><meta charset='UTF-8'><title>시스템 점검 결과</title>
+<style>
+body{font-family:monospace;background:#f4f4f4;padding:20px;}
+h1,h2{color:#0a0a0a;}
+pre{background:#222;color:#0f0;padding:10px;border-radius:6px;overflow-x:auto;}
+</style>
+</head><body>
+<h1>시스템 점검 결과 (21501001_KY)</h1>
+<h2>01. Default ID Check</h2><pre>
+lp:x:4:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</pre>
+<h2>02. Root Management Check</h2><pre>
+===== BAD ====
+</pre>
+<h2>03. Passwd File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 2357  9월  4일  11:44 /etc/passwd
+Passwd File Permission Check: GOOD
+</pre>
+<h2>04. Group File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 902  9월 29일  16:27 /etc/group
+Group File Permission Check: GOOD
+</pre>
+<h2>05. Passwd Rule Check</h2><pre>
+PASS_MIN_LEN	10
+PASS_MAX_DAYS	60
+PASS_MIN_DAYS	5
+========[Result]========
+Passwd Rule: GOOD
+========================
+</pre>
+<h2>06. Shell Check</h2><pre>
+bin:x:1:1:bin:/bin:/usr/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/usr/sbin/nologin
+operator:x:11:0:operator:/root:/usr/sbin/nologin
+games:x:12:100:games:/usr/games:/usr/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/sbin/nologin
+systemd-oom:x:999:999:systemd Userspace OOM Killer:/:/sbin/nologin
+systemd-coredump:x:993:993:systemd Core Dumper:/:/usr/sbin/nologin
+
+Shell Check Result: BAD
+</pre>
+<h2>07. SU Check</h2><pre>
+1. /etc/pam.d/su File
+#%PAM-1.0
+auth		required	pam_env.so
+auth		sufficient	pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth		sufficient	pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth		required	pam_wheel.so use_uid
+auth		substack	system-auth
+auth		include		postlogin
+account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+account		include		system-auth
+password	include		system-auth
+session		include		system-auth
+session		include		postlogin
+session		optional	pam_xauth.so
+2. /etc/group File
+root:x:0:
+bin:x:1:aa
+daemon:x:2:user
+sys:x:3:
+adm:x:4:
+tty:x:5:
+disk:x:6:
+lp:x:7:
+mem:x:8:
+kmem:x:9:
+wheel:x:10:user
+cdrom:x:11:
+mail:x:12:
+man:x:15:
+dialout:x:18:
+floppy:x:19:
+games:x:20:
+tape:x:33:
+video:x:39:
+ftp:x:50:
+lock:x:54:
+audio:x:63:
+users:x:100:
+clock:x:103:
+nobody:x:65534:
+tss:x:59:clevis
+dbus:x:81:
+utmp:x:22:
+utempter:x:35:
+avahi:x:70:
+systemd-oom:x:999:
+input:x:104:
+kvm:x:36:
+render:x:105:
+sgx:x:106:
+systemd-journal:x:190:
+polkitd:x:114:
+printadmin:x:998:
+colord:x:997:
+stapusr:x:156:
+stapsys:x:157:
+stapdev:x:158:
+stapunpriv:x:159:stapunpriv
+rtkit:x:172:
+geoclue:x:996:
+sssd:x:995:
+libstoragemgmt:x:994:
+systemd-coredump:x:993:
+wsdd:x:992:
+clevis:x:991:
+setroubleshoot:x:990:
+flatpak:x:989:
+brlapi:x:988:
+gdm:x:42:
+gnome-initial-setup:x:987:
+dnsmasq:x:986:
+pesign:x:985:
+sshd:x:74:
+chrony:x:984:
+tcpdump:x:72:
+plocate:x:983:
+gnome-remote-desktop:x:982:
+pipewire:x:981:
+user:x:1000:
+SU Check Result: BAD
+</pre>
+<h2>08. Shadow Check</h2><pre>
+----------. 1 root root 1097  8월 28일  11:42 /etc/shadow
+Shadow Check Result: GOOD
+</pre>
+</body></html>
