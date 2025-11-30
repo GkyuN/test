@@ -1,0 +1,7 @@
+
+================09.UMASK Check Start===================
+/etc/login.defs FIle Check
+UMASK		022
+========[Result]==========
+UMASK Check Result : GOOD
+=========[END]=============

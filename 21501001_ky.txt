@@ -1,0 +1,30 @@
+
+========16. home directory permission check start=========
+ 
+dr-xr-xr-x. 18 root root 235  8월 28일  11:20 /
+lrwxrwxrwx. 1 root root 7 2025년  4월  2일 /bin -> usr/bin
+drwx------. 14 1000 user 4096  9월  4일  11:00 /home/user
+dr-xr-x---. 7 root root 4096 11월 30일  00:44 /root
+drwxrwx---. 2 pesign pesign 40  9월  4일  11:00 /run/pesign
+drwxrwxr-x. 2 sssd sssd 40  9월  4일  11:00 /run/sssd/
+lrwxrwxrwx. 1 root root 8 2025년  4월  2일 /sbin -> usr/sbin
+drwxr-xr-x. 2 root root 6 2025년  4월  2일 /usr/games
+drwx--x--x. 2 root root 6  7월 18일  09:00 /usr/share/empty.sshd
+drwxr-xr-x. 2 root root 6 2025년  4월  2일 /var/adm
+drwxr-xr-x. 2 root root 6 2025년  4월  2일 /var/ftp
+drwxr-x---. 2 chrony chrony 19 11월 30일  00:55 /var/lib/chrony
+drwxr-xr-x. 4 colord colord 67  8월 28일  11:41 /var/lib/colord
+drwxr-xr-x. 2 root dnsmasq 6 2024년 10월 29일 /var/lib/dnsmasq
+drwxrwx--T. 5 gdm gdm 49  9월  4일  11:00 /var/lib/gdm
+drwxr-xr-x. 2 geoclue geoclue 6 2025년  2월 12일 /var/lib/geoclue
+drwx------. 2 gnome-remote-desktop gnome-remote-desktop 6  8월 28일  11:37 /var/lib/gnome-remote-desktop
+drwx------. 2 setroubleshoot setroubleshoot 6  7월  1일  09:00 /var/lib/setroubleshoot
+drwxr-xr-x. 2 avahi avahi 80  9월  4일  11:00 /var/run/avahi-daemon
+drwxr-xr-x. 2 root root 6 2025년  4월  2일 /var/spool/lpd
+drwxrwxr-x. 2 root mail 18  8월 28일  11:42 /var/spool/mail
+
+==========[Final Result]==========
+ 
+home dir permission check result : bad
+ 
+=========[FInal END]==========

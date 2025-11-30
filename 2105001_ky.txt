@@ -1,0 +1,15 @@
+
+=======18. Directory file Permission check start=======
+ 
+lrwxrwxrwx. 1 root root 8 2025년  4월  2일 /sbin -> usr/sbin
+drwxr-xr-x. 140 root root 8192 11월 30일  00:44 /etc
+lrwxrwxrwx. 1 root root 7 2025년  4월  2일 /bin -> usr/bin
+dr-xr-xr-x. 2 root root 49152 11월 29일  20:35 /usr/bin
+dr-xr-xr-x. 2 root root 16384 10월  2일  10:46 /usr/sbin
+ 
+ 
+======[FINAL RESULT]=======
+ 
+Dir file permission check result : bad
+ 
+=========[FINAL END]==========

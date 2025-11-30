@@ -1,0 +1,17 @@
+
+=======[21.ETC files permission check start]=======
+ 
+ 
+ 
+-rw-r--r--. 1 root root 473  8월 15일  09:00 /etc/rc.d/rc.local
+ETC files permission check : good
+-rw-r--r--. 1 root root 490  8월 15일  09:00 /etc/inittab
+ETC files permission check : good
+ 
+-------[ETC files result end]-------
+ 
+========[FINAL RESULT]=======
+ 
+ETC files permission check result : good
+ 
+=========[FINAL END]===========
