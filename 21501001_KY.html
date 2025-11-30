@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head><meta charset='UTF-8'><title>시스템 점검 결과</title>
+<style>
+body{font-family:monospace;background:#f4f4f4;padding:20px;}
+h1,h2{color:#0a0a0a; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 30px;}
+pre{background:#222;color:#dff1ff;padding:10px;border-radius:6px;overflow-x:auto;white-space: pre-wrap;}
+.good{color:#16a34a;font-weight:bold;}
+.bad{color:#dc2626;font-weight:bold;}
+</style>
+</head><body>
+<h1>시스템 점검 결과 (21501001_KY)</h1>
+<h2>01. Default ID Check</h2><pre>
+<span class='bad'>취약</span> : 아래와 같이 사용하지 않는 기본(Default) 계정이 발견되었습니다.
+lp:x:4:7:lp:/var/spool/lpd:/usr/sbin/nologin
+</pre>
+<h2>02. Root UID Check</h2><pre>
+<span class='bad'>취약</span> : root 계정 외에 UID가 '0'인 계정이 발견되었습니다.
+root -> UID0
+user -> UID0
+</pre>
+<h2>03. Passwd File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 2357  9월  4일  11:44 /etc/passwd
+<span class='good'>양호</span> : /etc/passwd 파일의 권한이 644(-rw-r--r--)입니다.
+</pre>
+<h2>04. Group File Permission Check</h2><pre>
+-rw-r--r--. 1 root root 902  9월 29일  16:27 /etc/group
+<span class='good'>양호</span> : /etc/group 파일의 권한이 644(-rw-r--r--)입니다.
+</pre>
+<h2>05. Passwd Rule Check</h2><pre>
+PASS_MIN_LEN	10
+PASS_MAX_DAYS	60
+PASS_MIN_DAYS	5
+<span class='good'>양호</span> : 패스워드 정책이 적절하게 설정되었습니다.
+</pre>
+<h2>06. Shell Check</h2><pre>
+bin:x:1:1:bin:/bin:/usr/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/usr/sbin/nologin
+operator:x:11:0:operator:/root:/usr/sbin/nologin
+games:x:12:100:games:/usr/games:/usr/sbin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/sbin/nologin
+systemd-oom:x:999:999:systemd Userspace OOM Killer:/:/sbin/nologin
+systemd-coredump:x:993:993:systemd Core Dumper:/:/usr/sbin/nologin
+<span class='good'>양호</span> : 불필요한 계정에 쉘 로그인이 차단되어 있습니다.
+</pre>
+<h2>07. SU Check</h2><pre>
+ 1. /etc/pam.d/su Check
+#%PAM-1.0
+auth		required	pam_env.so
+auth		sufficient	pam_rootok.so
+# Uncomment the following line to implicitly trust users in the "wheel" group.
+#auth		sufficient	pam_wheel.so trust use_uid
+# Uncomment the following line to require a user to be in the "wheel" group.
+#auth		required	pam_wheel.so use_uid
+auth		substack	system-auth
+auth		include		postlogin
+account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+account		include		system-auth
+password	include		system-auth
+session		include		system-auth
+session		include		postlogin
+session		optional	pam_xauth.so
+<span class='bad'>취약</span> : su 명령어 사용 제한이 설정되지 않았습니다.
+
+ 2. /etc/group Check
+bin:x:1:aa
+daemon:x:2:user
+<span class='bad'>취약</span> : 시스템 그룹에 불필요한 사용자가 포함되어 있습니다.
+</pre>
+<h2>08. Shadow File Permission Check</h2><pre>
+-r--------. 1 root root 1097  8월 28일  11:42 /etc/shadow
+<span class='good'>양호</span> : /etc/shadow 권한이 400(-r--------)입니다.
+</pre>
+<h2>09. UMASK Check</h2><pre>
+/etc/login.defs File Check
+UMASK		022
+<span class='good'>양호</span> : UMASK가 022로 설정되어, 파일 생성 시 비인가자의 쓰기 권한이 제한된 안전한 상태입니다.
+</pre>
+<h2>10. SetUID, SetGID Check</h2><pre>
+-rwsr-xr-x. 1 root root 41864 2025년  5월 26일 /usr/bin/newgrp
+-rwsr-xr-x. 1 root root 32392  7월  1일  09:00 /sbin/unix_chkpwd
+<span class='bad'>취약</span> : 불필요한 SetUID/SetGID 파일이 발견되어, root 권한 탈취 공격에 악용될 수 있는 취약한 상태입니다.
+</pre>
+<h2>11. xinetd.conf Check</h2><pre>
+-rw-r--r--. 1 root root 0 10월 27일  09:46 /etc/xinetd.conf
+<span class='bad'>취약</span> : xinetd.conf 파일의 접근 권한이 취약하여, 비인가자가 악의적인 프로그램을 등록해 root 권한을 획득할 위험이 있습니다.
+</pre>
+<h2>12. History File Check</h2><pre>
+-rw-------. 1 1000 user 22 11월 29일  21:04 /home/user/.bash_history
+-rw-------. 1 root root 21441 11월 29일  21:04 /root/.bash_history
+<span class='good'>양호</span> : histroy 파일의 권한이 600으로 설정되어, 명령어 사용 기록이 타인에게 노출되지 않는 안전한 상태입니다.
+</pre>
+<h2>13. Profile Permission Check</h2><pre>
+-rw-r--r--. 1 root root 1982 2023년 11월 29일 /etc/profile
+<span class='good'>양호</span> : /etc/profile 파일의 타 사용자 쓰기 권한이 제한되어, 악의적인 환경 설정 변조가 방지된 상태입니다.
+</pre>
+<h2>14. Hosts Permission Check</h2><pre>
+-rw-r--r--. 1 root root 384 2023년 11월 29일 /etc/hosts
+<span class='good'>양호</span> : /etc/hosts 파일의 타 사용자 쓰기 권한이 제한되어, 호스트 정보 위변조가 방지된 상태입니다
+</pre>
+<h2>15. Issue Permission Check</h2><pre>
+-rw-r--r--. 1 root root 20  7월 22일  09:00 /etc/issue
+<span class='good'>양호</span> : /etc/issue 파일의 타 사용자 쓰기 권한이 제한되어, 터미널 설정 관련 정보의 변조가 방지된 상태입니다.
+</pre>
+<h2>16. Home Directory Permission Check</h2><pre>
+dr-xr-xr-x. 18 root root 235  8월 28일  11:20 /
+drwx------. 14 1000 user 4096  9월  4일  11:00 /home/user
+dr-xr-x---. 7 root root 4096 11월 30일  16:06 /root
+<span class='good'>양호</span> : 홈 디렉터리의 타 사용자 쓰기 권한이 제한되어, 비인가자의 파일 변조 시도가 차단된 안전한 상태입니다.
+</pre>
+<h2>17. Home Dir Configuration Check</h2><pre>
+-rw-r--r--. 1 1000 user 144 2024년 10월 29일 /home/user/.bash_profile
+-rw-r--r--. 1 1000 user 522 2024년 10월 29일 /home/user/.bashrc
+-rw-------. 1 1000 user 22 11월 29일  21:04 /home/user/.bash_history
+-rw-r--r--. 1 root root 100 2025년  2월 12일 /root/.cshrc
+-rw-r--r--. 1 root root 141 2025년  2월 12일 /root/.bash_profile
+-rw-r--r--. 1 root root 429 2025년  2월 12일 /root/.bashrc
+-rw-------. 1 root root 21441 11월 29일  21:04 /root/.bash_history
+<span class='good'>양호</span> : 홈 디렉터리 내 환경변수 파일의 타 사용자 쓰기 권한이 제한되어, 비인가자에 의한 환경 변조가 방지된 상태입니다.
+</pre>
+<h2>18. Directory File Permission Check</h2><pre>
+dr-xr-xr-x. 2 root root 16384 10월  2일  10:46 /sbin
+drwxr-xr-x. 140 root root 8192 11월 30일  16:03 /etc
+dr-xr-xr-x. 2 root root 49152 11월 29일  20:35 /bin
+dr-xr-xr-x. 2 root root 49152 11월 29일  20:35 /usr/bin
+dr-xr-xr-x. 2 root root 16384 10월  2일  10:46 /usr/sbin
+<span class='good'>양호</span> : 주요 디렉터리의 타 사용자 쓰기 권한이 제한되어, 비인가자에 의한 환경 변조 및 침해 사고가 방지된 상태입니다.
+</pre>
+<h2>19. Path Conf Check</h2><pre>
+/root/.local/bin:/root/bin:/home/user/.local/bin:/home/user/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
+<span class='good'>양호</span> : PATH 환경변수에 현재 디렉터리를 의미하는 '.'이 포함되지 않아, 악성 파일의 비의도적 실행이 방지된 상태입니다..
+</pre>
+<h2>20. Root Remote Permission Check</h2><pre>
+-rw-r--r--. 1 root root 676 2025년  2월 13일 /etc/pam.d/login
+<span class='good'>양호</span> : root 원격 접근제어 설정 파일의 타 사용자 쓰기 권한이 제한되어, 비인가자에 의한 설정 변조가 방지된 상태입니다.
+</pre>
+<h2>21. ETC Files Permission Check</h2><pre>
+-rw-r--r--. 1 root root 473  8월 15일  09:00 /etc/rc.d/rc.local
+-rw-r--r--. 1 root root 490  8월 15일  09:00 /etc/inittab
+<span class='good'>양호</span> : 기타 중요 파일의 타 사용자 쓰기 권한이 제한되어, 비인가자에 의한 시스템 설정 변조가 방지된 상태입니다.
+</pre>
+<h2>22. Session Timeout Check</h2><pre>
+/etc/profile 내 세션 타임아웃(TMOUT) 설정 여부 점검
+<span class='bad'>취약</span> : 세션 타임아웃이 설정되지 않아, 유휴 세션 방치로 인한 기밀성 유출 및 가용성 저하 위험이 있습니다.
+</pre>
+</body></html>
